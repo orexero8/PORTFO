@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="OREXERO Solutions — technology studio building software, hardware, intelligent systems and experimental products." />
+  <meta name="theme-color" content="#050609" />
+  <title>OREXERO — We Build Technology</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+    :root{
+      --bg:#050609;
+      --bg2:#080a0f;
+      --panel:rgba(255,255,255,.035);
+      --line:rgba(255,255,255,.10);
+      --text:#f5f7fb;
+      --muted:#8d95a5;
+      --soft:#c9ced8;
+      --accent:#ffffff;
+      --cyan:#63e6ff;
+      --violet:#9b7cff;
+      --green:#72f2b0;
+      --max:1240px;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      background:var(--bg);
+      color:var(--text);
+      font-family:Inter,Arial,sans-serif;
+      overflow-x:hidden;
+    }
+    a{color:inherit;text-decoration:none}
+    button{font:inherit}
+
+    #space{
+      position:fixed;
+      inset:0;
+      z-index:-4;
+      background:
+        radial-gradient(circle at 50% 20%, rgba(99,230,255,.08), transparent 32%),
+        radial-gradient(circle at 80% 65%, rgba(155,124,255,.07), transparent 30%),
+        var(--bg);
+    }
+
+    .grid{
+      position:fixed;
+      inset:0;
+      z-index:-3;
+      opacity:.28;
+      background-image:
+        linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px);
+      background-size:55px 55px;
+      mask-image:linear-gradient(to bottom, black, transparent 82%);
+    }
+
+    .noise{
+      position:fixed;
+      inset:0;
+      z-index:-2;
+      opacity:.035;
+      pointer-events:none;
+      background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.8'/%3E%3C/svg%3E");
+    }
+
+    .wrap{width:min(var(--max),calc(100% - 40px));margin:auto}
+
+    nav{
+      position:fixed;
+      top:0;left:0;right:0;
+      z-index:50;
+      border-bottom:1px solid transparent;
+      transition:.35s ease;
+    }
+    nav.scrolled{
+      background:rgba(5,6,9,.72);
+      backdrop-filter:blur(18px);
+      border-color:var(--line);
+    }
+    .nav-inner{
+      height:76px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-family:"Space Grotesk",sans-serif;
+      font-weight:700;
+      letter-spacing:.18em;
+    }
+    .brand-mark{
+      width:28px;height:28px;
+      border:1px solid rgba(255,255,255,.7);
+      position:relative;
+      transform:rotate(45deg);
+    }
+    .brand-mark:before{
+      content:"";
+      position:absolute;
+      inset:5px;
+      border:1px solid var(--cyan);
+    }
+    .nav-links{display:flex;gap:30px;color:var(--muted);font-size:13px}
+    .nav-links a{transition:.2s}
+    .nav-links a:hover{color:#fff}
+    .nav-cta{
+      border:1px solid var(--line);
+      padding:10px 16px;
+      border-radius:999px;
+      font-size:13px;
+      background:rgba(255,255,255,.03);
+    }
+
+    .hero{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      padding:130px 0 90px;
+      position:relative;
+    }
+    .hero-content{max-width:950px}
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:9px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.025);
+      padding:8px 12px;
+      border-radius:999px;
+      color:#b9c0cc;
+      font-size:11px;
+      letter-spacing:.13em;
+      text-transform:uppercase;
+      margin-bottom:28px;
+    }
+    .live-dot{
+      width:6px;height:6px;border-radius:50%;
+      background:var(--green);
+      box-shadow:0 0 16px var(--green);
+    }
+    h1{
+      font-family:"Space Grotesk",sans-serif;
+      font-size:clamp(64px,10vw,142px);
+      line-height:.86;
+      letter-spacing:-.075em;
+      max-width:1000px;
+    }
+    .gradient{
+      background:linear-gradient(110deg,#fff 20%,#bfc9ff 48%,#63e6ff 75%,#fff);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+    .hero-copy{
+      max-width:680px;
+      color:var(--muted);
+      font-size:18px;
+      line-height:1.7;
+      margin-top:34px;
+    }
+    .hero-actions{display:flex;gap:12px;margin-top:34px;flex-wrap:wrap}
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:14px 20px;
+      border-radius:9px;
+      border:1px solid var(--line);
+      font-size:13px;
+      transition:.25s ease;
+    }
+    .btn.primary{background:#fff;color:#050609;border-color:#fff}
+    .btn:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.3)}
+    .btn.primary:hover{box-shadow:0 12px 40px rgba(255,255,255,.12)}
+
+    .scroll{
+      position:absolute;
+      bottom:32px;
+      left:0;
+      color:#687080;
+      font-size:10px;
+      letter-spacing:.2em;
+      text-transform:uppercase;
+    }
+
+    section{padding:130px 0}
+    .section-head{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:30px;
+      margin-bottom:55px;
+    }
+    .kicker{
+      color:var(--cyan);
+      font-size:11px;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      margin-bottom:13px;
+    }
+    h2{
+      font-family:"Space Grotesk",sans-serif;
+      font-size:clamp(42px,6vw,78px);
+      line-height:.95;
+      letter-spacing:-.055em;
+    }
+    .section-desc{
+      max-width:430px;
+      color:var(--muted);
+      line-height:1.7;
+      font-size:14px;
+    }
+
+    .capabilities{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:1px;
+      background:var(--line);
+      border:1px solid var(--line);
+    }
+    .cap{
+      min-height:280px;
+      padding:30px;
+      background:rgba(8,10,15,.92);
+      position:relative;
+      overflow:hidden;
+      transition:.35s ease;
+    }
+    .cap:hover{background:rgba(15,18,26,.96);transform:translateY(-5px)}
+    .cap-number{font-size:10px;color:#596170;letter-spacing:.15em}
+    .cap-icon{font-size:30px;margin:50px 0 25px}
+    .cap h3{font-family:"Space Grotesk";font-size:23px;margin-bottom:12px}
+    .cap p{color:var(--muted);font-size:13px;line-height:1.65}
+
+    .projects{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}
+    .project{
+      border:1px solid var(--line);
+      background:linear-gradient(145deg,rgba(255,255,255,.045),rgba(255,255,255,.012));
+      min-height:420px;
+      position:relative;
+      overflow:hidden;
+      padding:30px;
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-end;
+      border-radius:14px;
+    }
+    .project:nth-child(1){grid-column:span 7}
+    .project:nth-child(2){grid-column:span 5}
+    .project:nth-child(3){grid-column:span 5}
+    .project:nth-child(4){grid-column:span 7}
+    .project:before{
+      content:"";
+      position:absolute;
+      width:320px;height:320px;
+      border-radius:50%;
+      right:-100px;top:-110px;
+      background:radial-gradient(circle,rgba(99,230,255,.16),transparent 68%);
+      transition:.4s;
+    }
+    .project:hover:before{transform:scale(1.35)}
+    .project-visual{
+      position:absolute;
+      inset:0;
+      display:grid;
+      place-items:center;
+      opacity:.8;
+    }
+    .orb{
+      width:170px;height:170px;border-radius:50%;
+      border:1px solid rgba(99,230,255,.35);
+      box-shadow:0 0 80px rgba(99,230,255,.08),inset 0 0 50px rgba(99,230,255,.05);
+      position:relative;
+    }
+    .orb:before,.orb:after{
+      content:"";position:absolute;inset:20px;border:1px solid rgba(155,124,255,.35);border-radius:50%;
+      transform:rotate(35deg) scaleX(1.5);
+    }
+    .orb:after{transform:rotate(-35deg) scaleX(1.5)}
+    .project-meta{position:relative;z-index:2}
+    .tags{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:15px}
+    .tag{
+      border:1px solid rgba(255,255,255,.12);
+      padding:6px 8px;
+      border-radius:999px;
+      color:#aab2c0;
+      font-size:9px;
+      text-transform:uppercase;
+      letter-spacing:.1em;
+      background:rgba(0,0,0,.22);
+    }
+    .project h3{
+      font-family:"Space Grotesk";
+      font-size:32px;
+      letter-spacing:-.04em;
+      margin-bottom:9px;
+    }
+    .project p{max-width:600px;color:#8d95a5;font-size:13px;line-height:1.65}
+    .status{
+      position:absolute;
+      top:25px;right:25px;
+      font-size:9px;
+      color:var(--green);
+      letter-spacing:.13em;
+      text-transform:uppercase;
+      z-index:2;
+    }
+
+    .aman{
+      margin-top:18px;
+      border:1px solid rgba(99,230,255,.18);
+      background:linear-gradient(135deg,rgba(99,230,255,.06),rgba(155,124,255,.035));
+      border-radius:16px;
+      padding:45px;
+      display:grid;
+      grid-template-columns:1.2fr .8fr;
+      gap:50px;
+      position:relative;
+      overflow:hidden;
+    }
+    .aman:after{
+      content:"AMAN";
+      position:absolute;
+      right:-20px;
+      bottom:-70px;
+      font-family:"Space Grotesk";
+      font-size:180px;
+      font-weight:700;
+      color:rgba(255,255,255,.018);
+      pointer-events:none;
+    }
+    .aman h3{
+      font-family:"Space Grotesk";
+      font-size:clamp(42px,6vw,74px);
+      letter-spacing:-.06em;
+    }
+    .aman p{color:var(--muted);line-height:1.75;margin-top:18px;max-width:650px}
+    .specs{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-content:start}
+    .spec{
+      border:1px solid var(--line);
+      padding:17px;
+      background:rgba(0,0,0,.18);
+    }
+    .spec small{display:block;color:#626b7a;font-size:9px;text-transform:uppercase;letter-spacing:.13em;margin-bottom:8px}
+    .spec strong{font-size:13px}
+
+    .team{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:18px;
+    }
+    .person{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:28px;
+      background:rgba(255,255,255,.025);
+      min-height:330px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+    }
+    .avatar{
+      width:64px;height:64px;
+      border-radius:50%;
+      border:1px solid var(--line);
+      display:grid;place-items:center;
+      font-family:"Space Grotesk";
+      font-size:20px;
+      background:linear-gradient(145deg,#151922,#08090d);
+    }
+    .person h3{font-family:"Space Grotesk";font-size:24px;margin-top:24px}
+    .role{color:var(--cyan);font-size:11px;margin-top:7px}
+    .person p{color:var(--muted);font-size:13px;line-height:1.65;margin-top:17px}
+    .handle{color:#737c8c;font-size:11px;margin-top:20px}
+
+    .manifesto{
+      text-align:center;
+      border-top:1px solid var(--line);
+      border-bottom:1px solid var(--line);
+      padding:140px 0;
+    }
+    .manifesto p{
+      max-width:1000px;
+      margin:auto;
+      font-family:"Space Grotesk";
+      font-size:clamp(38px,6vw,78px);
+      line-height:1;
+      letter-spacing:-.06em;
+    }
+    .manifesto span{color:#5d6573}
+
+    .contact{
+      text-align:center;
+      padding-bottom:120px;
+    }
+    .contact h2{max-width:850px;margin:0 auto}
+    .contact p{color:var(--muted);margin:24px auto 32px;max-width:550px;line-height:1.7}
+    .contact-links{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+
+    footer{
+      border-top:1px solid var(--line);
+      padding:30px 0;
+      color:#656e7d;
+      font-size:11px;
+    }
+    .footer-inner{display:flex;justify-content:space-between;gap:20px}
+    .footer-brand{color:#dfe3eb;letter-spacing:.14em;font-family:"Space Grotesk"}
+
+    .reveal{opacity:0;transform:translateY(30px);transition:opacity .8s ease,transform .8s ease}
+    .reveal.visible{opacity:1;transform:none}
+
+    @media(max-width:900px){
+      .nav-links{display:none}
+      .capabilities{grid-template-columns:1fr 1fr}
+      .project:nth-child(n){grid-column:span 12}
+      .aman{grid-template-columns:1fr}
+      .team{grid-template-columns:1fr}
+    }
+    @media(max-width:600px){
+      .wrap{width:min(var(--max),calc(100% - 28px))}
+      .hero{padding-top:110px}
+      h1{font-size:62px}
+      .hero-copy{font-size:15px}
+      section{padding:90px 0}
+      .section-head{display:block}
+      .section-desc{margin-top:20px}
+      .capabilities{grid-template-columns:1fr}
+      .cap{min-height:220px}
+      .aman{padding:28px}
+      .specs{grid-template-columns:1fr}
+      .footer-inner{display:block}
+      .footer-inner div+div{margin-top:10px}
+    }
+  
+    /* OREXERO cinematic visual upgrade */
+    .hero::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:-1;
+      background:
+        linear-gradient(90deg, #050609 0%, rgba(5,6,9,.91) 34%, rgba(5,6,9,.54) 67%, rgba(5,6,9,.82) 100%),
+        linear-gradient(0deg, #050609 0%, transparent 45%, rgba(5,6,9,.55) 100%),
+        url("https://cdn1.vogel.de/kbMwIXFFYEHay81Q_NrlJoDqHMk%3D/fit-in/1000x0/p7i.vogel.de/wcms/3d/21/3d2163e1c620c06fa94740403dd297d1/0123860891v2.jpeg") center/cover;
+      opacity:.78;
+      filter:saturate(.9) contrast(1.08);
+    }
+    .hero::after{
+      content:"";
+      position:absolute;
+      width:60vw;height:60vw;
+      right:-20vw;top:8vh;
+      border-radius:50%;
+      background:radial-gradient(circle,rgba(99,230,255,.12),transparent 62%);
+      pointer-events:none;
+      z-index:-1;
+    }
+    .hero-content{position:relative}
+    .hero-content::after{
+      content:"OREXERO / R&D / 2026";
+      position:absolute;
+      right:-130px;
+      bottom:5px;
+      writing-mode:vertical-rl;
+      color:rgba(255,255,255,.2);
+      font:10px/1 "Space Grotesk";
+      letter-spacing:.28em;
+    }
+    .cap:nth-child(1){background:linear-gradient(135deg,rgba(4,7,13,.88),rgba(4,7,13,.65)),url("https://media.licdn.com/dms/image/v2/D5622AQEnriXhXZV6bA/feedshare-image-high-res/B56ZbKZBEPHUAs-/0/1747152278497?e=2147483647&t=a5qWpopzgCKDdFU_AOsmLqNcGutC1dcvlTZ9oOnoLFw&v=beta") center/cover}
+    .cap:nth-child(2){background:linear-gradient(135deg,rgba(4,7,13,.88),rgba(4,7,13,.60)),url("https://cdn1.vogel.de/kbMwIXFFYEHay81Q_NrlJoDqHMk%3D/fit-in/1000x0/p7i.vogel.de/wcms/3d/21/3d2163e1c620c06fa94740403dd297d1/0123860891v2.jpeg") center/cover}
+    .cap:nth-child(3){background:linear-gradient(135deg,rgba(4,7,13,.9),rgba(4,7,13,.58)),url("https://www.grupoacs.com/ficheros_editor/img/m_prensa/1175/prensa-1175.jpeg") center/cover}
+    .cap:nth-child(4){background:linear-gradient(135deg,rgba(4,7,13,.92),rgba(4,7,13,.62)),url("https://media.licdn.com/dms/image/v2/D5622AQEnriXhXZV6bA/feedshare-image-high-res/B56ZbKZBEPHUAs-/0/1747152278497?e=2147483647&t=a5qWpopzgCKDdFU_AOsmLqNcGutC1dcvlTZ9oOnoLFw&v=beta") center/cover}
+    .cap:hover{background-blend-mode:normal}
+    .project{isolation:isolate}
+    .project::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:-1;
+      background:linear-gradient(0deg,rgba(3,4,7,.98) 0%,rgba(3,4,7,.48) 48%,rgba(3,4,7,.1) 100%);
+    }
+    .project:nth-child(1){
+      background-image:linear-gradient(135deg,rgba(5,6,9,.34),rgba(5,6,9,.25)),url("https://www.grupoacs.com/ficheros_editor/img/m_prensa/1175/prensa-1175.jpeg");
+      background-size:cover;background-position:center;
+    }
+    .project:nth-child(2){
+      background-image:linear-gradient(135deg,rgba(5,6,9,.38),rgba(5,6,9,.22)),url("https://cdn1.vogel.de/kbMwIXFFYEHay81Q_NrlJoDqHMk%3D/fit-in/1000x0/p7i.vogel.de/wcms/3d/21/3d2163e1c620c06fa94740403dd297d1/0123860891v2.jpeg");
+      background-size:cover;background-position:center;
+    }
+    .project:nth-child(3){
+      background-image:linear-gradient(135deg,rgba(5,6,9,.42),rgba(5,6,9,.25)),url("https://media.licdn.com/dms/image/v2/D5622AQEnriXhXZV6bA/feedshare-image-high-res/B56ZbKZBEPHUAs-/0/1747152278497?e=2147483647&t=a5qWpopzgCKDdFU_AOsmLqNcGutC1dcvlTZ9oOnoLFw&v=beta");
+      background-size:cover;background-position:center;
+    }
+    .project:nth-child(4){
+      background-image:linear-gradient(135deg,rgba(5,6,9,.38),rgba(5,6,9,.22)),url("https://www.grupoacs.com/ficheros_editor/img/m_prensa/1175/prensa-1175.jpeg");
+      background-size:cover;background-position:center;
+    }
+    .project .project-visual{opacity:.28;mix-blend-mode:screen}
+    .project:hover{transform:translateY(-5px);box-shadow:0 30px 90px rgba(0,0,0,.35)}
+    .project,.cap{transition:transform .4s ease,box-shadow .4s ease,background .4s ease}
+    .aman{box-shadow:0 30px 100px rgba(0,0,0,.28)}
+    .aman::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(110deg,rgba(99,230,255,.07),transparent 42%,rgba(155,124,255,.08));
+      pointer-events:none;
+    }
+    .section-head,.projects,.capabilities,.team,.aman{position:relative}
+    @media(max-width:600px){
+      .hero::before{background-position:65% center}
+      .hero-content::after{display:none}
+    }
+
+  
+    .visual-strip{padding:20px 0 130px}
+    .visual-strip-grid{display:grid;grid-template-columns:1.2fr .8fr 1fr;gap:12px;height:330px}
+    .visual-tile{position:relative;overflow:hidden;border:1px solid rgba(255,255,255,.1);border-radius:12px;background-position:center;background-size:cover;display:flex;align-items:flex-end;padding:22px;transition:.45s ease}
+    .visual-tile::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(3,4,7,.88),transparent 65%)}
+    .visual-tile span{position:relative;z-index:2;font:11px "Space Grotesk";letter-spacing:.2em;color:#dce2eb}
+    .visual-tile:hover{transform:scale(1.015);box-shadow:0 25px 70px rgba(0,0,0,.35)}
+    .tile-a{background-image:url("https://cdn1.vogel.de/kbMwIXFFYEHay81Q_NrlJoDqHMk%3D/fit-in/1000x0/p7i.vogel.de/wcms/3d/21/3d2163e1c620c06fa94740403dd297d1/0123860891v2.jpeg")}
+    .tile-b{background-image:url("https://www.grupoacs.com/ficheros_editor/img/m_prensa/1175/prensa-1175.jpeg")}
+    .tile-c{background-image:url("https://media.licdn.com/dms/image/v2/D5622AQEnriXhXZV6bA/feedshare-image-high-res/B56ZbKZBEPHUAs-/0/1747152278497?e=2147483647&t=a5qWpopzgCKDdFU_AOsmLqNcGutC1dcvlTZ9oOnoLFw&v=beta")}
+    @media(max-width:700px){.visual-strip-grid{grid-template-columns:1fr;height:auto}.visual-tile{height:210px}}
+
+  </style>
+</head>
+
+<body>
+  <div id="space"></div>
+  <div class="grid"></div>
+  <div class="noise"></div>
+
+  <nav id="nav">
+    <div class="wrap nav-inner">
+      <a href="#" class="brand">
+        <span class="brand-mark"></span>
+        OREXERO
+      </a>
+      <div class="nav-links">
+        <a href="#work">Projects</a>
+        <a href="#team">Team</a>
+        <a href="#about">About</a>
+      </div>
+      <a class="nav-cta" href="#contact">Let's build →</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero">
+      <div class="wrap">
+        <div class="hero-content reveal">
+          <div class="eyebrow"><span class="live-dot"></span> OREXERO SOLUTIONS · TECHNOLOGY STUDIO</div>
+
+          <h1>
+            WE BUILD<br />
+            <span class="gradient">TECHNOLOGY.</span>
+          </h1>
+
+          <p class="hero-copy">
+            OREXERO is a multidisciplinary team building software, hardware,
+            intelligent systems and experimental products — turning ideas into
+            things that actually work.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn primary" href="#work">Explore our work ↗</a>
+            <a class="btn" href="#contact">Start a conversation</a>
+          </div>
+        </div>
+      </div>
+      <div class="wrap scroll">Scroll to explore ↓</div>
+    </section>
+
+    <section id="about">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div>
+            <div class="kicker">01 / What we do</div>
+            <h2>FROM CODE<br />TO CIRCUITS.</h2>
+          </div>
+          <p class="section-desc">
+            We don't limit ourselves to one technology or one category.
+            We research, design, engineer and build across the digital and
+            physical worlds.
+          </p>
+        </div>
+
+        <div class="capabilities reveal">
+          <article class="cap">
+            <div class="cap-number">01 — SOFTWARE</div>
+            <div class="cap-icon">◈</div>
+            <h3>Software Systems</h3>
+            <p>Platforms, APIs, web applications, automation, business systems and products engineered for real-world use.</p>
+          </article>
+          <article class="cap">
+            <div class="cap-number">02 — HARDWARE</div>
+            <div class="cap-icon">⌬</div>
+            <h3>Hardware</h3>
+            <p>Electronic systems, custom PCBs, connected devices, prototypes and physical products.</p>
+          </article>
+          <article class="cap">
+            <div class="cap-number">03 — INTELLIGENCE</div>
+            <div class="cap-icon">◎</div>
+            <h3>AI & Systems</h3>
+            <p>Intelligent workflows, automation and software systems designed to solve complex problems.</p>
+          </article>
+          <article class="cap">
+            <div class="cap-number">04 — R&D</div>
+            <div class="cap-icon">✦</div>
+            <h3>Experimentation</h3>
+            <p>We prototype unusual ideas, test assumptions and turn promising concepts into working technology.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="work">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div>
+            <div class="kicker">02 / Selected work</div>
+            <h2>BUILT.<br />NOT PROMISED.</h2>
+          </div>
+          <p class="section-desc">
+            A growing portfolio of systems and prototypes. Some are products,
+            some are experiments, and some are foundations for what comes next.
+          </p>
+        </div>
+
+        <div class="projects reveal">
+          <article class="project">
+            <div class="project-visual"><div class="orb"></div></div>
+            <div class="status">IN DEVELOPMENT</div>
+            <div class="project-meta">
+              <div class="tags"><span class="tag">Software</span><span class="tag">Fintech</span><span class="tag">Platform</span></div>
+              <h3>The Market Code</h3>
+              <p>A technology project exploring software systems and digital infrastructure for modern financial and business workflows.</p>
+            </div>
+          </article>
+
+          <article class="project">
+            <div class="project-visual">
+              <div class="orb" style="width:125px;height:125px"></div>
+            </div>
+            <div class="status">PROTOTYPE</div>
+            <div class="project-meta">
+              <div class="tags"><span class="tag">Hardware</span><span class="tag">GSM</span><span class="tag">Security</span></div>
+              <h3>AMAN</h3>
+              <p>Standalone security device designed and built by Dhaya — movement detection with automatic GSM phone-call alerts.</p>
+            </div>
+          </article>
+
+          <article class="project">
+            <div class="project-visual"><div class="orb" style="width:145px;height:145px"></div></div>
+            <div class="status">EXPLORING</div>
+            <div class="project-meta">
+              <div class="tags"><span class="tag">Agrotech</span><span class="tag">IoT</span><span class="tag">Systems</span></div>
+              <h3>SPC Agrotech</h3>
+              <p>Technology exploration connecting software, data and physical-world systems.</p>
+            </div>
+          </article>
+
+          <article class="project">
+            <div class="project-visual"><div class="orb" style="width:200px;height:200px"></div></div>
+            <div class="status">SYSTEMS</div>
+            <div class="project-meta">
+              <div class="tags"><span class="tag">Enterprise</span><span class="tag">Software</span><span class="tag">MES</span></div>
+              <h3>SOPI MES</h3>
+              <p>Industrial software direction focused on operational visibility and digital process management.</p>
+            </div>
+          </article>
+        </div>
+
+        <div class="aman reveal">
+          <div>
+            <div class="kicker">Featured hardware / 2026</div>
+            <h3>AMAN<span class="gradient">.</span></h3>
+            <p>
+              A compact standalone security device designed from the ground up.
+              AMAN detects movement and can automatically call a fixed phone
+              number over the cellular network — without Wi-Fi, cloud dependency
+              or a configuration app.
+            </p>
+            <div style="margin-top:24px">
+              <a class="btn" href="https://www.linkedin.com/in/dhaya-bouzar-kouadri-1a7934168/" target="_blank" rel="noopener">View Dhaya's project ↗</a>
+            </div>
+          </div>
+
+          <div class="specs">
+            <div class="spec"><small>Core</small><strong>SIM800C GSM</strong></div>
+            <div class="spec"><small>Input</small><strong>Motion sensor</strong></div>
+            <div class="spec"><small>Board</small><strong>Custom PCB</strong></div>
+            <div class="spec"><small>Connectivity</small><strong>Cellular / GSM</strong></div>
+            <div class="spec"><small>Design</small><strong>Custom enclosure</strong></div>
+            <div class="spec"><small>Stage</small><strong>Working prototype</strong></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="team">
+      <div class="wrap">
+        <div class="section-head reveal">
+          <div>
+            <div class="kicker">03 / The team</div>
+            <h2>SMALL TEAM.<br />BIG SURFACE.</h2>
+          </div>
+          <p class="section-desc">
+            Different backgrounds. Different disciplines. One objective:
+            build useful technology from the ground up.
+          </p>
+        </div>
+
+        <div class="team reveal">
+          <article class="person">
+            <div>
+              <div class="avatar">DB</div>
+              <h3>Dhaya Bouzar Kouadri</h3>
+              <div class="role">BANKING · FINTECH · SYSTEMS · ELECTRONICS</div>
+              <p>
+                Banker and technology builder working across fintech, systems
+                architecture, coding and electronics. Creator of the AMAN
+                standalone GSM security-device prototype.
+              </p>
+            </div>
+            <div class="handle">@themarketcode</div>
+          </article>
+
+          <article class="person">
+            <div>
+              <div class="avatar">ZT</div>
+              <h3>Zitouni Touati</h3>
+              <div class="role">IT · SOFTWARE · DEVELOPMENT · BUSINESS</div>
+              <p>
+                IT and software developer focused on product development,
+                digital systems, business development and turning ideas into
+                scalable technology projects.
+              </p>
+            </div>
+            <div class="handle">OREXERO · Product & Business</div>
+          </article>
+
+          <article class="person">
+            <div>
+              <div class="avatar">MD</div>
+              <h3>Djemmane Manis</h3>
+              <div class="role">SOFTWARE · PYTHON · SECURITY · SYSTEMS</div>
+              <p>
+                Software developer and technology enthusiast focused on Python,
+                automation, backend systems and cybersecurity projects.
+              </p>
+            </div>
+            <div class="handle">Manisso · GitHub / @Manisso</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="visual-strip">
+      <div class="wrap">
+        <div class="visual-strip-grid">
+          <div class="visual-tile tile-a"><span>ENGINEERING</span></div>
+          <div class="visual-tile tile-b"><span>INTELLIGENCE</span></div>
+          <div class="visual-tile tile-c"><span>HARDWARE</span></div>
+        </div>
+      </div>
+    </section>
+
+    <div class="manifesto">
+      <div class="wrap reveal">
+        <p>
+          We don't want to be another software agency.
+          <span>We want to build technology that deserves to exist.</span>
+        </p>
+      </div>
+    </div>
+
+    <section id="contact" class="contact">
+      <div class="wrap reveal">
+        <div class="kicker">04 / Contact</div>
+        <h2>HAVE AN IDEA?<br /><span class="gradient">LET'S BUILD IT.</span></h2>
+        <p>
+          Partnerships, product ideas, software projects, hardware prototypes
+          or something completely unconventional — talk to the team.
+        </p>
+        <div class="contact-links">
+          <a class="btn primary" href="mailto:contact@orexero.com">contact@orexero.com ↗</a>
+          <a class="btn" href="tel:+213782191914">+213 782 191 914</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap footer-inner">
+      <div class="footer-brand">OREXERO SOLUTIONS</div>
+      <div>Software · Hardware · Intelligence · R&D</div>
+      <div>© 2026 OREXERO</div>
+    </div>
+  </footer>
+
+  <script>
+    // Lightweight particle field — no external JS dependency.
+    const canvas = document.createElement('canvas');
+    canvas.id = 'particles';
+    canvas.style.cssText = 'position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.55';
+    document.body.prepend(canvas);
+    const ctx = canvas.getContext('2d');
+    let W,H,pts=[];
+
+    function resize(){
+      W=canvas.width=innerWidth;
+      H=canvas.height=innerHeight;
+      pts=Array.from({length:Math.min(95,Math.floor(W/13))},()=>({
+        x:Math.random()*W,y:Math.random()*H,
+        vx:(Math.random()-.5)*.18,vy:(Math.random()-.5)*.18,
+        r:Math.random()*1.2+.2
+      }));
+    }
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      for(const p of pts){
+        p.x+=p.vx;p.y+=p.vy;
+        if(p.x<0||p.x>W)p.vx*=-1;
+        if(p.y<0||p.y>H)p.vy*=-1;
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fillStyle='rgba(150,190,255,.55)';
+        ctx.fill();
+      }
+      requestAnimationFrame(draw);
+    }
+    addEventListener('resize',resize); resize(); draw();
+
+    const nav=document.getElementById('nav');
+    addEventListener('scroll',()=>nav.classList.toggle('scrolled',scrollY>30));
+
+    const observer=new IntersectionObserver(entries=>{
+      entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')});
+    },{threshold:.12});
+    document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+  </script>
+</body>
+</html>
